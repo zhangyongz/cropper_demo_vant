@@ -1,18 +1,15 @@
 <template>
   <div class="cropper_box" v-show="show">
-    <div class="header">
-      <div class="back_content" @click="back">
-        <img src="./img/back.png" class="header_back" />
-      </div>
-      <span class="header_btn" @click="sure">使用</span>
-    </div>
-
-    <div class="wrapper" style="height: calc(100vh - 45px)">
+    <div class="wrapper">
       <vue-cropper ref="cropper" :img="img" :output-size="option.outputSize" :output-type="option.outputType"
-      :info="false" :full="option.full" :can-move="canMove" :can-move-box="canMoveBox" :fixed-box="fixedBox"
-      :original="option.original" :auto-crop="option.autoCrop" :auto-crop-width="autoCropWidth"
-      :auto-crop-height="autoCropHeight" :center-box="option.centerBox" :high="option.high" :fixedNumber="fixedNumber"
-      :fixed="fixed" :enlarge="1"></vue-cropper>
+                   :info="false" :full="option.full" :can-move="canMove" :can-move-box="canMoveBox" :fixed-box="fixedBox"
+                   :original="option.original" :auto-crop="option.autoCrop" :auto-crop-width="autoCropWidth"
+                   :auto-crop-height="autoCropHeight" :center-box="option.centerBox" :high="option.high" :fixedNumber="fixedNumber"
+                   :fixed="fixed" :enlarge="1"></vue-cropper>
+    </div>
+    <div class="btn_wrapper">
+      <span class="btn_item" @click="cancel">取消</span>
+      <span class="btn_item" @click="sure">完成</span>
     </div>
   </div>
 </template>
@@ -87,8 +84,9 @@ export default {
         this.$emit('backImg', data)
       })
     },
-    back () {
+    cancel () {
       this.$emit('change', false)
+      this.$emit('cancel')
     }
   }
 }
@@ -101,39 +99,40 @@ export default {
   left: 0;
   top: 0;
   z-index: 1000;
-  .header {
-    height: 45px;
-    padding: 0 10px;
-    background-color: #ececec;
+  .wrapper {
+    width: 100%;
+    height: 90vh;
+    .vue-cropper {
+      background: #000000;
+    }
+  }
+  .btn_wrapper {
+    height: 10vh;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    .back_content {
-      width: 45px;
+    color: #f7f7f7;
+    background-color: #000000;
+    position: relative;
+    &:before {
+      content: " ";
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      height: 1px;
+      border-top: 1px solid #3c3c3c;
+      color: #3c3c3c;
+      transform-origin: 0 0;
+      transform: scaleY(0.5);
+    }
+    .btn_item {
       height: 100%;
-      display: flex;
-      align-items: center;
-    }
-    .header_back {
-      width: 20px;
-    }
-    .header_btn {
-      width: 50px;
-      height: 30px;
-      font-size: 16px;
-      color: #ffffff;
-      background-color: #06c05f;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       line-height: normal;
-      border-radius: 5px;
-    }
-  }
-  .wrapper {
-    width: 100%;
-    .vue-cropper {
-      background: #000000;
+      padding: 0 20px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
     }
   }
 }

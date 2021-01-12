@@ -1,4 +1,3 @@
-/* eslint-disable */
 import Vue from 'vue'
 import CropperComponent from './cropper'
 import { mergeOptions } from './utils'
@@ -20,7 +19,7 @@ if (!$vm) {
 
 const cropper = {
   // 显示
-  show(options) {
+  show (options) {
     // 合并传入的参数至组件的props
     if (typeof options === 'object') {
       mergeOptions($vm, options)
@@ -32,6 +31,7 @@ const cropper = {
     // 取消上次监听
     $vm.$off('change')
     $vm.$off('backImg')
+    $vm.$off('cancel')
 
     // 监听关闭方法
     $vm.$on('change', (value) => {
@@ -49,11 +49,21 @@ const cropper = {
         })
       }
     })
+    $vm.$on('cancel', () => {
+      if ($vm.cancel) {
+        const name = options.file.file.name
+        const content = options.file.content
+        $vm.backImg({
+          name: name.substring(0, name.lastIndexOf('.')) + '.jpg',
+          content
+        })
+      }
+    })
   },
-  hide() {
+  hide () {
     $vm.show = false
   },
-  isVisible() {
+  isVisible () {
     return $vm.show
   }
 }

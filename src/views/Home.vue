@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <van-uploader :after-read="afterRead" v-model="fileList" />
-    <v-cropper v-show="show" :img="img" @backImg="backImg"></v-cropper>
+    <v-cropper v-show="show" :img="img" @backImg="backImg" @cancel="cancel"></v-cropper>
   </div>
 </template>
 
@@ -13,6 +13,7 @@ export default {
   name: 'Home',
   data () {
     return {
+      file: {},
       fileList: [],
       show: false,
       img: ''
@@ -23,6 +24,22 @@ export default {
     'v-cropper': vCropper
   },
   methods: {
+    cancel () {
+      const file = this.file
+      this.show = false
+      file.content = this.file.content
+      file.status = 'uploading'
+      file.message = '上传中...'
+      this.uploadImg({
+        result: this.file.content
+      }).then((res) => {
+        file.status = 'success'
+        file.message = '上传成功'
+      }).catch(() => {
+        file.status = 'failed'
+        file.message = '上传失败'
+      })
+    },
     backImg (result) {
       const file = this.file
       this.show = false
